@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "Zone restreinte"
-AuthUserFile /etc/apache2/.htpasswd
-Require valid-user
