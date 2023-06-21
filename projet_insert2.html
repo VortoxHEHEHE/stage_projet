@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Formulaire d'insertion</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+			padding-top: 50px;
+		}
+
+		h2 {
+			margin-bottom: 20px;
+		}
+
+		form {
+			display: inline-block;
+			text-align: left;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		input[type="text"] {
+			width: 200px;
+			padding: 5px;
+		}
+
+		input[type="submit"] {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			cursor: pointer;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #45a049;
+		}
+	</style>
+</head>
+<body>
+	<h2>Formulaire d'insertion de donnees</h2>
+
+	<form method="post" action="">
+		<label for="stagiaire">Stagiaires :</label>
+		<input type="text" name="stagiaire" id="stagiaire" required><br><br>
+
+		<label for="cours">Cours :</label>
+		<input type="text" name="cours" id="cours" required><br><br>
+
+		<label for="kwh">KWH :</label>
+		<input type="text" name="kwh" id="kwh" required><br><br>
+
+		<input type="submit" value="Inserer">
+
+		<a href="visu_proj_kwh.php">Pour voir les donnees</a>
+
+	</form>
+</body>
+
+<script>document.getElementById('dateDuJour'.textContent = new Date().toLocaleDateString();</script>
+
+</html>
+
+<?php
+
+$host = 'localhost';
+$dbName = 'thierry';
+$username = 'root';
+$password = 'Bouvier.12';
+
+try {
+     $conn = new PDO("mysql:host=$host; dbname=$dbName", $username, $password);
+     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+   echo 'Erreur de connexion a la base de donnees : ' . $e->getMessage();
+
+   exit();
+
+}
+
+
+     $stagiaire = $_POST['stagiaire'];
+     $cours = $_POST['cours'];
+     $kwh = $_POST['kwh'];
+
+$sql = "INSERT INTO ecolo (date, stagiaire, cours, kwh) VALUES (NOW(), :stagiaire, :cours, :kwh)";
+
+try {
+     $stmt = $conn->prepare($sql);
+     $stmt->bindParam(':stagiaire', $stagiaire);
+     $stmt->bindParam(':cours', $cours);
+     $stmt->bindParam(':kwh', $kwh);
+     $stmt->execute();
+
+     echo 'Donnees inserees avec succes.';
+}catch (PDOExecption $e) {
+     echo 'Erreur lors de l\'sertion des donnees : ' .$e->getMessage();
+
+    exit();
+}
+
+$conn = null;
+?>
